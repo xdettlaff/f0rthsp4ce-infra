@@ -10,7 +10,7 @@
       access_log off;
     '';
 
-    locations."/".proxyPass = "http://localhost:8100";
+    locations."/".proxyPass = "http://localhost:8200";
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
