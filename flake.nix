@@ -36,7 +36,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, agenix, cofob-home, botka-v0, botka-v1
+  outputs = { self, nixpkgs, flake-utils, agenix, lanzaboote, botka-v0, botka-v1
     , ... }@attrs:
     {
       nixosConfigurations = builtins.mapAttrs (key: value:
@@ -65,6 +65,7 @@
             buildInputs = [
               botka-v0.packages.x86_64-linux.f0bot
               botka-v1.packages.x86_64-linux.f0bot
+              lanzaboote.packages.x86_64-linux.lzbt
               (pkgs.nginxQuic.override {
                 modules = pkgs.lib.unique (pkgs.nginxQuic.modules
                   ++ [ pkgs.nginxModules.brotli pkgs.nginxModules.zstd ]);
