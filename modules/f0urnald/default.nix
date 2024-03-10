@@ -18,7 +18,7 @@
       path = [ pkgs.zsh pkgs.python3 pkgs.docker pkgs.systemd ];
       environment.SENDER_PATH = ./sender.py;
       serviceConfig = {
-        ExecStart = "zsh ${./run.sh} papermc";
+        ExecStart = "${pkgs.bash}/bin/bash ${./run.sh} papermc";
         Restart = "always";
         EnvironmentFile = config.age.secrets.credentials-f0runald.path;
       };
@@ -27,10 +27,10 @@
       description = "f0runald for telegram-bot";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.zsh pkgs.python3 pkgs.docker pkgs.systemd ];
+      path = [ pkgs.python3 pkgs.docker pkgs.systemd ];
       environment.SENDER_PATH = ./sender.py;
       serviceConfig = {
-        ExecStart = "zsh ${./run.sh} telegram-bot";
+        ExecStart = "${pkgs.bash}/bin/bash ${./run.sh} telegram-bot";
         Restart = "always";
         EnvironmentFile = config.age.secrets.credentials-f0runald.path;
       };

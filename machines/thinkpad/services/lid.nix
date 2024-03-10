@@ -17,11 +17,10 @@ in {
 
     wantedBy = [ "multi-user.target" ];
     wants = [ "acpid.service" ];
-    path = [ lid ];
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "lid";
+      ExecStart = "${lid}/bin/lid";
       Restart = "always";
     };
   };
