@@ -5,6 +5,7 @@
     useTmpfs = true;
     cleanOnBoot = true;
   };
+  boot.loader.grub.configurationLimit = 5;
 
   services.fstrim.enable = true;
 
