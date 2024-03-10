@@ -1,0 +1,91 @@
+{ pkgs, config, lib, ... }:
+
+{
+  boot.tmp = {
+    useTmpfs = true;
+    cleanOnBoot = true;
+  };
+
+  services.fstrim.enable = true;
+
+  environment.pathsToLink = [ "/share/zsh" ];
+
+  security.sudo.wheelNeedsPassword = false;
+
+  users.mutableUsers = false;
+
+  time.timeZone = "Europe/Moscow";
+  i18n.defaultLocale = "en_US.UTF-8";
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
+
+  services.earlyoom.enable = true;
+
+  virtualisation.oci-containers.backend = "docker";
+
+  system = {
+    stateVersion = "23.05";
+    autoUpgrade = {
+      enable = true;
+      allowReboot = false;
+      flake = "github:cofob/f0rthsp4ce-infra";
+      dates = "4:45";
+    };
+  };
+
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      allowed-users = [ "@users" ];
+      trusted-users = [ "@wheel" ];
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+        "https://f0rthsp4ce.cachix.org"
+      ];
+      trusted-public-keys = [
+        "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "f0rthsp4ce.cachix.org-1:9kv0K1CkG9K1NPgxNZUpN903DHCzLjg/ozZvSnHI0Dw="
+      ];
+    };
+
+    daemonCPUSchedPolicy = "batch";
+    daemonIOSchedPriority = 5;
+
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+    '';
+
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 7d";
+    };
+
+    optimise = {
+      automatic = true;
+      dates = [ "weekly" ];
+    };
+  };
+
+  environment.systemPackages = with pkgs;
+    let
+      upgrade-system = pkgs.writeScriptBin "upgrade-system" ''
+        sudo rm -rf /root/.cache
+
+        branch="$1"
+        if [ -z "$branch" ]; then
+          branch="main"
+        fi
+
+        sudo nixos-rebuild switch --flake "github:cofob/f0rthsp4ce-infra/$branch"
+      '';
+    in [ jq git vim htop ncdu tmux wget ffsend pastebinit upgrade-system ];
+
+  networking.firewall.trustedInterfaces = [ "lo" ];
+}
