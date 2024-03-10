@@ -4,14 +4,8 @@ let
   run-rcon =
     "${pkgs.docker}/bin/docker run --network papermc_default --rm --interactive itzg/rcon-cli --host papermc --password f0rthsp4ce";
 in {
-  users.users.gameserver = {
-    isSystemUser = true;
-    group = "gameserver";
-  };
-  users.groups.gameserver = { };
-
   services.borgbackup.jobs.minecraft = rec {
-    paths = "/home/gameserver/gameservers/minecraft/papermc/server";
+    paths = "/root/gameservers/minecraft/papermc/server";
     exclude = [ "${paths}/bluemap/web/maps" ];
     encryption.mode = "none";
     repo = "/backups/minecraft";
