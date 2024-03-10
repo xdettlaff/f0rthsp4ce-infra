@@ -2,6 +2,7 @@
 
 let
   lid = pkgs.writeScriptBin "lid" ''
+    #!${pkgs.bash}/bin/bash
     while true; do
       if grep -q open /proc/acpi/button/lid/*/state; then
         (cd /root/notif/ && ./ping admins "Смертный посмел открыть мою крышку")
