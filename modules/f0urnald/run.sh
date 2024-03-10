@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-sender() $SENDER_PATH "$@"
-
 filter_papermc() {
 	sed -u '
 		# Strip time.
@@ -35,8 +33,8 @@ case "$1" in
 			--output=cat \
 			--lines 0 --follow | \
 			sed -u 's/bot[0-9]\+:[0-9a-zA-Z_-]\{35\}\b/[redacted]/' | \
-			sender "https://t.me/c/2070662990/8944"
-			# sender "https://t.me/c/1909689525/773"
+			$SENDER_PATH "https://t.me/c/2070662990/8944"
+			# $SENDER_PATH "https://t.me/c/1909689525/773"
 		;;
 
 	papermc)
@@ -47,7 +45,7 @@ case "$1" in
 			docker logs --follow --tail 0 papermc-papermc-1 | filter_papermc || true
 			echo minecraft server is down
 			sleep 0.5
-		done | sender "https://t.me/c/2070662990/197"
+		done | $SENDER_PATH "https://t.me/c/2070662990/197"
 		;;
 
 	filter_papermc) filter_papermc;;

@@ -15,7 +15,7 @@
       description = "f0runald for papermc";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.zsh pkgs.python3 pkgs.docker pkgs.systemd ];
+      path = [ pkgs.curl pkgs.python3 pkgs.docker pkgs.systemd ];
       environment.SENDER_PATH = ./sender.py;
       serviceConfig = {
         ExecStart = "${pkgs.bash}/bin/bash ${./run.sh} papermc";
@@ -27,7 +27,7 @@
       description = "f0runald for telegram-bot";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.python3 pkgs.docker pkgs.systemd ];
+      path = [ pkgs.curl pkgs.python3 pkgs.docker pkgs.systemd ];
       environment.SENDER_PATH = ./sender.py;
       serviceConfig = {
         ExecStart = "${pkgs.bash}/bin/bash ${./run.sh} telegram-bot";
