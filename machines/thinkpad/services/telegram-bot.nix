@@ -17,13 +17,12 @@
     description = "Telegram bot";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
-    path = [ botka-v0.packages.x86_64-linux.f0bot ];
     environment = {
       TZ = "Asia/Tbilisi";
       RUST_BACKTRACE = "1";
     };
     serviceConfig = {
-      ExecStart = "f0bot bot ${config.age.secrets.credentials-botka-v0.path}";
+      ExecStart = "${botka-v0.packages.x86_64-linux.f0bot}/bin/f0bot bot ${config.age.secrets.credentials-botka-v0.path}";
       KillSignal = "SIGINT"; # freaking tokio::ctrl_c handler
       WorkingDirectory = "/home/telegram-bot/v0";
       User = "telegram-bot";
@@ -40,13 +39,12 @@
     description = "Telegram bot";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
-    path = [ botka-v1.packages.x86_64-linux.f0bot ];
     environment = {
       TZ = "Asia/Tbilisi";
       RUST_BACKTRACE = "1";
     };
     serviceConfig = {
-      ExecStart = "f0bot bot ${config.age.secrets.credentials-botka-v1.path}";
+      ExecStart = "${botka-v1.packages.x86_64-linux.f0bot}/bin/f0bot bot ${config.age.secrets.credentials-botka-v1.path}";
       KillSignal = "SIGINT"; # freaking tokio::ctrl_c handler
       WorkingDirectory = "/home/telegram-bot/v1";
       User = "telegram-bot";
