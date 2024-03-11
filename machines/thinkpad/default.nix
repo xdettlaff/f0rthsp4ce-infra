@@ -14,6 +14,7 @@
   services.logind.lidSwitch = "ignore";
 
   virtualisation.docker.enable = true;
+  virtualisation.docker.logDriver = "json-file";
 
   networking.firewall.allowedTCPPorts = [
     22 # ssh
