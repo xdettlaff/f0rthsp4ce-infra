@@ -66,6 +66,8 @@ baudrate = 115200
 xyz_data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
 button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 
+last_button_state = None
+
 # Устанавливаем соединение с портом
 try:
     ser = serial.Serial(port, baudrate, timeout=1)
@@ -110,12 +112,17 @@ try:
             button_match = button_data_pattern.search(line)
             if button_match:
                 button_state = True if button_match.group(1) == "HIGH" else False
-                print(f"Button: {button_state}")
 
-                if not button_state:
+                if (
+                    last_button_state is not None
+                    and last_button_state != button_state
+                    and button_state is False
+                ):
                     print("BUTTON ALERT")
                     os.system('ping admins "ALERT: button"')
                     ring()
+
+                last_button_state = button_state
 
         # Маленькая пауза, чтобы не загружать процессор
         time.sleep(0.1)
