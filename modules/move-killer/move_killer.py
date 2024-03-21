@@ -2,8 +2,48 @@ import serial
 import re
 import os
 import time
+from os import environ
+
+from json import dumps as json_dumps
+from json import loads as json_loads
+from ssl import CERT_NONE, SSLContext
+from websocket import WebSocket
 
 
+ssl_context = SSLContext()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = CERT_NONE
+
+token = environ["homeassistant_token"]
+
+
+def ring():
+    ws = WebSocket(sslopt={"cert_reqs": CERT_NONE})
+    # ws.connect("wss://homeassistant.lo.f0rth.space/api/websocket")
+    ws.connect(
+        "wss://10.0.24.60/api/websocket",
+        host="homeassistant.lo.f0rth.space",
+    )
+    ws.recv()  # recv auth request
+    ws.send(json_dumps({"type": "auth", "access_token": token}))  # auth
+    message = json_loads(ws.recv())  # get auth status
+    if message["type"] != "auth_ok":
+        print(f"Failed auth: {message}")
+        exit(1)
+    for _ in range(3):
+      ws.send(
+          json_dumps(
+              {
+                  "type": "call_service",
+                  "domain": "button",
+                  "service": "press",
+                  "service_data": {"entity_id": "button.bell_bell_ring"},
+                  "id": 43,
+              }
+          )
+      )  # call ring
+      time.sleep(0.4)
+    ws.close()
 # time.sleep(60)
 
 # Параметры порта
@@ -49,6 +89,7 @@ try:
                         continue
 
                     print("ALERT")
+                    ring()
                     os.system('ping admins "ALERT: move"')
                     alert = 1
                     # time.sleep(5)
