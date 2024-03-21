@@ -15,7 +15,7 @@
 
   users.mutableUsers = false;
 
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Asia/Tbilisi";
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
