@@ -86,7 +86,7 @@
           branch="main"
         fi
 
-        sudo nixos-rebuild switch --flake "github:cofob/f0rthsp4ce-infra/$branch"
+        sudo nixos-rebuild switch --flake "github:xdettlaff/f0rthsp4ce-infra/$branch"
       '';
     in [ jq git vim htop ncdu tmux wget ffsend pastebinit upgrade-system ];
 
