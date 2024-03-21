@@ -1,4 +1,4 @@
-{ config, pkgs, botka-v0, botka-v1, ... }:
+{ config, pkgs, ... }:
 
 {
   users.users.telegram-bot = {
@@ -23,7 +23,7 @@
     };
     serviceConfig = {
       ExecStart =
-        "${botka-v0.packages.x86_64-linux.f0bot}/bin/f0bot bot ${config.age.secrets.credentials-botka-v0.path}";
+        "${pkgs.botka-v0}/bin/f0bot bot ${config.age.secrets.credentials-botka-v0.path}";
       KillSignal = "SIGINT"; # freaking tokio::ctrl_c handler
       WorkingDirectory = "/home/telegram-bot/v0";
       User = "telegram-bot";
@@ -46,7 +46,7 @@
     };
     serviceConfig = {
       ExecStart =
-        "${botka-v1.packages.x86_64-linux.f0bot}/bin/f0bot bot ${config.age.secrets.credentials-botka-v1.path}";
+        "${pkgs.botka-v1}/bin/f0bot bot ${config.age.secrets.credentials-botka-v1.path}";
       KillSignal = "SIGINT"; # freaking tokio::ctrl_c handler
       WorkingDirectory = "/home/telegram-bot/v1";
       User = "telegram-bot";

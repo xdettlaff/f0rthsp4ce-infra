@@ -49,7 +49,7 @@ try:
                         continue
 
                     print("ALERT")
-                    os.system('''(cd /root/notif/ && ./ping admins "ALERT: move")''')
+                    os.system('ping admins "ALERT: move"')
                     alert = 1
                     # time.sleep(5)
 

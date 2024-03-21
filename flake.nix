@@ -45,6 +45,8 @@
           specialArgs = attrs;
           modules = [ ./machines/${key} ];
         })) (builtins.readDir ./machines);
+
+      overlays.default = final: prev: (import ./overlay.nix final attrs);
     } // flake-utils.lib.eachSystem
     (with flake-utils.lib.system; [ x86_64-linux i686-linux aarch64-linux ])
     (system:
@@ -62,18 +64,15 @@
           ci-cache = pkgs.stdenv.mkDerivation {
             name = "ci-cache";
             version = "0.1.0";
-            buildInputs = [
-              botka-v0.packages.x86_64-linux.f0bot
-              botka-v1.packages.x86_64-linux.f0bot
-              lanzaboote.packages.x86_64-linux.lzbt
-              (pkgs.nginxQuic.override {
-                modules = pkgs.lib.unique (pkgs.nginxQuic.modules
-                  ++ [ pkgs.nginxModules.brotli pkgs.nginxModules.zstd ]);
-              })
-            ];
+            buildInputs = (
+              [
+                pkgs.zerotierone # zerotier is unfree and not built in nixpkgs cache
+              ] ++
+              builtins.attrValues (import ./overlay.nix pkgs attrs)
+            );
             phases = [ "installPhase" ];
             installPhase = "echo 'ci-cache' > $out";
           };
-        };
+        } // (import ./overlay.nix pkgs attrs);
       });
 }

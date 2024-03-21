@@ -21,4 +21,5 @@ in {
   "secrets/credentials/botka-v1.age".publicKeys = users ++ [ thinkpad ];
   "secrets/credentials/f0runald.age".publicKeys = users ++ [ thinkpad ];
   "secrets/credentials/minecraft-rcon.age".publicKeys = users ++ [ thinkpad ];
+  "secrets/credentials/notif-config.age".publicKeys = users ++ [ thinkpad ];
 }

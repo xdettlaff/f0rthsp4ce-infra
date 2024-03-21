@@ -13,6 +13,10 @@ in {
       description = "Serial Reader Service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.notif ];
+      environment = {
+        CONFIG_FILE = config.age.secrets.credentials-notif-config.path;
+      };
       serviceConfig = {
         ExecStart = "${pythonEnv}/bin/python ${./move_killer.py}";
         Restart = "always";
