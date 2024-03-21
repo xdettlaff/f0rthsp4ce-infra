@@ -87,7 +87,6 @@
     ffsend
     pastebinit
     upgrade-system
-    notif
   ];
 
   networking.firewall.trustedInterfaces = [ "lo" ];
