@@ -76,19 +76,19 @@
     };
   };
 
-  environment.systemPackages = with pkgs;
-    let
-      upgrade-system = pkgs.writeScriptBin "upgrade-system" ''
-        sudo rm -rf /root/.cache
-
-        branch="$1"
-        if [ -z "$branch" ]; then
-          branch="main"
-        fi
-
-        sudo nixos-rebuild switch --flake "github:xdettlaff/f0rthsp4ce-infra/$branch"
-      '';
-    in [ jq git vim htop ncdu tmux wget ffsend pastebinit upgrade-system ];
+  environment.systemPackages = with pkgs; [
+    jq
+    git
+    vim
+    htop
+    ncdu
+    tmux
+    wget
+    ffsend
+    pastebinit
+    upgrade-system
+    notif
+  ];
 
   networking.firewall.trustedInterfaces = [ "lo" ];
 }
