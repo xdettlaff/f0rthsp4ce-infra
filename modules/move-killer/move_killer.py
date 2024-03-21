@@ -67,6 +67,7 @@ xyz_data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
 button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 
 last_button_state = None
+last_xyz_alert_time = 0
 
 # Устанавливаем соединение с портом
 try:
@@ -95,19 +96,11 @@ try:
                 # print(f"X: {x}, Y: {y}, Z: {z}")  # Теперь у вас есть переменные x, y, z в формате float
 
                 if x > 1 or x < -1 or y > 1 or y < -1 or z > 12 or z < 11:
-                    if alert > 0:
-                        alert += 1
-
-                        if alert == 10:
-                            alert = 0
-
-                        continue
-
-                    print("ALERT")
-                    os.system('ping admins "ALERT: move"')
-                    ring()
-                    alert = 1
-                    # time.sleep(5)
+                    if time.time() - last_xyz_alert_time > 10:
+                        print("XYZ ALERT")
+                        os.system('ping admins "ALERT: move"')
+                        ring()
+                        last_xyz_alert_time = time.time()
 
             button_match = button_data_pattern.search(line)
             if button_match:
