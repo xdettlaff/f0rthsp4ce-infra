@@ -63,7 +63,8 @@ port = "/dev/ttyUSB0"
 baudrate = 115200
 
 # Регулярное выражение для разбора данных
-data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
+xyz_data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
+button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 
 # Устанавливаем соединение с портом
 try:
@@ -83,12 +84,12 @@ try:
             # print(line)  # Для отладки: выводим сырую строку
 
             # Используем регулярные выражения для разбора строки
-            match = data_pattern.search(line)
-            if match:
+            xyz_match = xyz_data_pattern.search(line)
+            if xyz_match:
                 # Преобразуем извлеченные строки в числа с плавающей точкой
-                x = float(match.group(1))
-                y = float(match.group(2))
-                z = float(match.group(3))
+                x = float(xyz_match.group(1))
+                y = float(xyz_match.group(2))
+                z = float(xyz_match.group(3))
                 # print(f"X: {x}, Y: {y}, Z: {z}")  # Теперь у вас есть переменные x, y, z в формате float
 
                 if x > 1 or x < -1 or y > 1 or y < -1 or z > 12 or z < 11:
@@ -105,6 +106,16 @@ try:
                     ring()
                     alert = 1
                     # time.sleep(5)
+
+            button_match = button_data_pattern.search(line)
+            if button_match:
+                button_state = True if button_match.group(1) == "HIGH" else False
+                print(f"Button: {button_state}")
+
+                if not button_state:
+                    print("BUTTON ALERT")
+                    os.system('ping admins "ALERT: button"')
+                    ring()
 
         # Маленькая пауза, чтобы не загружать процессор
         time.sleep(0.1)
