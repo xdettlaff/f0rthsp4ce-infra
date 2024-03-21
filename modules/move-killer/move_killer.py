@@ -30,20 +30,32 @@ def ring():
     if message["type"] != "auth_ok":
         print(f"Failed auth: {message}")
         exit(1)
-    for _ in range(3):
-      ws.send(
-          json_dumps(
-              {
-                  "type": "call_service",
-                  "domain": "button",
-                  "service": "press",
-                  "service_data": {"entity_id": "button.bell_bell_ring"},
-                  "id": 43,
-              }
-          )
-      )  # call ring
-      time.sleep(0.4)
+    ws.send(
+        json_dumps(
+            {
+                "type": "call_service",
+                "domain": "switch",
+                "service": "turn_on",
+                "service_data": {"entity_id": "switch.bell_bell_switch"},
+                "id": 1,
+            }
+        )
+    )  # enable ring
+    time.sleep(1)
+    ws.send(
+        json_dumps(
+            {
+                "type": "call_service",
+                "domain": "switch",
+                "service": "turn_off",
+                "service_data": {"entity_id": "switch.bell_bell_switch"},
+                "id": 2,
+            }
+        )
+    )  # disable ring
     ws.close()
+
+
 # time.sleep(60)
 
 # Параметры порта
@@ -51,7 +63,7 @@ port = "/dev/ttyUSB0"
 baudrate = 115200
 
 # Регулярное выражение для разбора данных
-data_pattern = re.compile(r'X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)')
+data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
 
 # Устанавливаем соединение с портом
 try:
@@ -67,7 +79,7 @@ try:
 
     while True:
         if ser.in_waiting > 0 or True:
-            line = ser.readline().decode('utf-8').strip()
+            line = ser.readline().decode("utf-8").strip()
             # print(line)  # Для отладки: выводим сырую строку
 
             # Используем регулярные выражения для разбора строки
@@ -89,8 +101,8 @@ try:
                         continue
 
                     print("ALERT")
-                    ring()
                     os.system('ping admins "ALERT: move"')
+                    ring()
                     alert = 1
                     # time.sleep(5)
 
