@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let pythonEnv = pkgs.python3.withPackages (ps: with ps; [ pyserial websocket-client ]);
+let
+  pythonEnv =
+    pkgs.python3.withPackages (ps: with ps; [ pyserial websocket-client ]);
 in {
   options = {
     services.serial-reader = {
