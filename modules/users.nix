@@ -22,7 +22,7 @@ in {
       cofob = {
         isNormalUser = true;
         description = "Egor Ternovoy";
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "pipewire" ];
         uid = 1001;
         hashedPasswordFile = config.age.secrets.password-cofob.path;
         openssh.authorizedKeys.keys = user-keys.cofob;
@@ -30,7 +30,7 @@ in {
       def = {
         isNormalUser = true;
         description = "Dettlaff";
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "pipewire" ];
         uid = 1002;
         hashedPasswordFile = config.age.secrets.password-def.path;
         openssh.authorizedKeys.keys = user-keys.dettlaff;
