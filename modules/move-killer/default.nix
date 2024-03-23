@@ -20,12 +20,13 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.notif ];
       environment = {
+        PYTHONUNBUFFERED = "1";
         CONFIG_FILE = config.age.secrets.credentials-notif-config.path;
       };
       serviceConfig = {
         EnvironmentFile = config.age.secrets.credentials-move-killer.path;
         ExecStart = "${pythonEnv}/bin/python ${./move_killer.py}";
-        Restart = "always";
+        Restart = "on-failure";
         User = "root";
       };
     };
