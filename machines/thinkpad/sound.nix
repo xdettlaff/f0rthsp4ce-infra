@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # mpg123
+    mpg123
     # pipewire
     alsa-utils # Добавляем утилиты ALSA (включая aplay)
     pulseaudio
