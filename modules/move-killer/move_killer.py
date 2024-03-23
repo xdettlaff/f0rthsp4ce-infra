@@ -25,6 +25,7 @@ def ring():
     ws.connect(
         "wss://10.0.24.60/api/websocket",
         host="homeassistant.lo.f0rth.space",
+        timeout=1,
     )
     ws.recv()  # recv auth request
     ws.send(json_dumps({"type": "auth", "access_token": token}))  # auth
