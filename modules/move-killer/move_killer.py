@@ -1,4 +1,5 @@
 from hashlib import sha256
+from random import choice
 from shlex import quote
 import serial
 import re
@@ -20,6 +21,8 @@ token = environ["homeassistant_token"]
 
 
 last_ring = 0.0
+
+sounds_dir = environ["SOUNDS_DIR"]
 
 
 def ring():
@@ -66,6 +69,15 @@ def ring():
     ws.close()
 
 
+def play_sound():
+    file = os.path.join(sounds_dir, choice(os.listdir(sounds_dir)))
+    os.system(f"aplay {quote(file)}")
+
+
+os.system("amixer sset 'Master' 0%")
+play_sound()  # захватываем контроль над пайпвайром под рутом
+os.system("amixer sset 'Master' 70%")
+
 # time.sleep(60)
 
 # Параметры порта
@@ -101,8 +113,8 @@ try:
 
     while True:
         if ser.in_waiting > 0 or True:
-            line = ser.readline().decode("utf-8").strip()
-            #print(f"Line: {line}")
+            line = ser.readline().decode("utf-8", errors="replace").strip()
+            # print(f"Line: {line}")
 
             try:
                 data = json_loads(line)
@@ -146,6 +158,7 @@ try:
                         print(f"XYZ ALERT: f{x}, {y}, {z}")
                         os.system(f'notif admins "ALERT: move {x}, {y}, {z}"')
                         ring()
+                        play_sound()
                         last_xyz_alert_time = time.time()
 
             if data["type"] == "btn":
@@ -159,6 +172,7 @@ try:
                     print("BUTTON ALERT")
                     os.system('notif admins "ALERT: button"')
                     ring()
+                    play_sound()
 
                 last_button_state = button_state
 

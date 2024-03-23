@@ -18,10 +18,11 @@ in {
       description = "Serial Reader Service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.notif ];
+      path = [ pkgs.notif pkgs.alsa-utils ];
       environment = {
         PYTHONUNBUFFERED = "1";
         CONFIG_FILE = config.age.secrets.credentials-notif-config.path;
+        SOUNDS_DIR = ./sounds;
       };
       serviceConfig = {
         EnvironmentFile = config.age.secrets.credentials-move-killer.path;
