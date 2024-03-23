@@ -77,7 +77,7 @@ steady_x, steady_y, steady_z = None, None, None
 
 
 def check_acc(steady: float, value: float) -> bool:
-    return abs(steady - value) > 0.10
+    return abs(steady - value) > 0.03
 
 
 # Устанавливаем соединение с портом
@@ -124,6 +124,7 @@ try:
                     steady_x, steady_y, steady_z = x, y, z
 
                 if time.time() - last_steady_recheck > 60:
+                    print("Reassing steady values")
                     steady_x, steady_y, steady_z = x, y, z
                     last_steady_recheck = time.time()
 
