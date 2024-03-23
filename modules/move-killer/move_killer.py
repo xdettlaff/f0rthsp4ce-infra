@@ -159,7 +159,7 @@ try:
                         print(f"XYZ ALERT: f{x}, {y}, {z}")
                         os.system(f'notif admins "ALERT: move {x}, {y}, {z}"')
                         ring()
-                        if last_play_sound > 60:
+                        if time.time() - last_play_sound > 60:
                           play_sound()
                           last_play_sound = time.time()
                           
@@ -176,7 +176,7 @@ try:
                     print("BUTTON ALERT")
                     os.system('notif admins "ALERT: button"')
                     ring()
-                    if last_play_sound > 60:
+                    if time.time() - last_play_sound > 60:
                       play_sound()
                       last_play_sound = time.time()
 
