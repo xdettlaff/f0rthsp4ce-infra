@@ -10,6 +10,7 @@ in {
   home-manager.users.tar = import ../home/tar;
   home-manager.users.mike = import ../home/mike;
 
+  age.secrets.password-root.file = ../secrets/passwords/root.age;
   age.secrets.password-cofob.file = ../secrets/passwords/cofob.age;
   age.secrets.password-def.file = ../secrets/passwords/def.age;
   age.secrets.password-tar.file = ../secrets/passwords/tar.age;
@@ -17,6 +18,7 @@ in {
 
   users = {
     users = {
+      root.hashedPasswordFile = config.age.secrets.password-root.path;
       cofob = {
         isNormalUser = true;
         description = "Egor Ternovoy";

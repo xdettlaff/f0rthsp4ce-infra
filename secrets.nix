@@ -11,6 +11,7 @@ let
   all = users ++ systems;
 in {
   # User passwords
+  "secrets/passwords/root.age".publicKeys = all;
   "secrets/passwords/cofob.age".publicKeys = all;
   "secrets/passwords/def.age".publicKeys = all;
   "secrets/passwords/tar.age".publicKeys = all;
