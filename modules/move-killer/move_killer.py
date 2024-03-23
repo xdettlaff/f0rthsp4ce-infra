@@ -71,6 +71,7 @@ button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 
 last_button_state = None
 last_xyz_alert_time = 0
+last_steady_recheck = time.time()
 
 steady_x, steady_y, steady_z = None, None, None
 
@@ -121,6 +122,10 @@ try:
 
                 if steady_x is None:
                     steady_x, steady_y, steady_z = x, y, z
+
+                if time.time() - last_steady_recheck > 60:
+                    steady_x, steady_y, steady_z = x, y, z
+                    last_steady_recheck = time.time()
 
                 if any(
                     [
