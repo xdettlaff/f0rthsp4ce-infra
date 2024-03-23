@@ -99,7 +99,7 @@ try:
                 continue
 
             if data["type"] == "ver":
-                h = sha256(data["c"]).hexdigest()
+                h = sha256(data["c"].encode()).hexdigest()
                 if h != environ["hash"]:
                     msg = f"ALERT: hash mismatch, orig data: {h}"
                     print(msg)
@@ -119,7 +119,7 @@ try:
                         last_xyz_alert_time = time.time()
 
             if data["type"] == "btn":
-                button_state = data["s"]
+                button_state: bool = data["s"]
 
                 if (
                     last_button_state is not None
