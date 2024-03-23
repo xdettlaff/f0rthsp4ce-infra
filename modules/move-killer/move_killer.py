@@ -102,7 +102,7 @@ try:
     while True:
         if ser.in_waiting > 0 or True:
             line = ser.readline().decode("utf-8").strip()
-            print(f"Line: {line}")
+            #print(f"Line: {line}")
 
             try:
                 data = json_loads(line)
