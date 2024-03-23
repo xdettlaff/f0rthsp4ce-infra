@@ -19,7 +19,14 @@ ssl_context.verify_mode = CERT_NONE
 token = environ["homeassistant_token"]
 
 
+last_ring = 0.0
+
+
 def ring():
+    global last_ring
+    if time.time() - last_ring > 3:
+        return
+    last_ring = time.time()
     ws = WebSocket(sslopt={"cert_reqs": CERT_NONE})
     # ws.connect("wss://homeassistant.lo.f0rth.space/api/websocket")
     ws.connect(
