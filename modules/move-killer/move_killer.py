@@ -76,7 +76,7 @@ steady_x, steady_y, steady_z = list(map(float, environ["steady_xyz"].split(","))
 
 
 def check_acc(steady: float, value: float) -> bool:
-    return abs(steady - value) < 0.03
+    return abs(steady - value) > 0.03
 
 
 # Устанавливаем соединение с портом
@@ -119,14 +119,16 @@ try:
                 y: float = data["y"]
                 z: float = data["z"]
 
-                if (
-                    check_acc(steady_x, x)
-                    and check_acc(steady_y, y)
-                    and check_acc(steady_z, z)
+                if any(
+                    [
+                        check_acc(steady_x, x),
+                        check_acc(steady_y, y),
+                        check_acc(steady_z, z),
+                    ]
                 ):
                     if time.time() - last_xyz_alert_time > 10:
-                        print("XYZ ALERT")
-                        os.system('notif admins "ALERT: move"')
+                        print(f"XYZ ALERT: f{x}, {y}, {z}")
+                        os.system(f'notif admins "ALERT: move {x}, {y}, {z}"')
                         ring()
                         last_xyz_alert_time = time.time()
 
