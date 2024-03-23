@@ -137,6 +137,9 @@ try:
 
 except serial.SerialException as e:
     print(f"Ошибка при подключении к порту: {e}")
+    msg = f"ALERT: serial error: {e}"
+    os.system(f"notif admins {quote(msg)}")
 
 except KeyboardInterrupt:
     print("\nПрограмма прервана пользователем")
+    os.system("notif admins 'ALERT: user interrupt'")
