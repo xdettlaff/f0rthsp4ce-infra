@@ -30,7 +30,7 @@ in {
       def = {
         isNormalUser = true;
         description = "Dettlaff";
-        extraGroups = [ "wheel" "pipewire" ];
+        extraGroups = [ "wheel" "pipewire" "audio"];
         uid = 1002;
         hashedPasswordFile = config.age.secrets.password-def.path;
         openssh.authorizedKeys.keys = user-keys.dettlaff;
