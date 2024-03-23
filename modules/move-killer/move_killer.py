@@ -98,7 +98,7 @@ try:
                 if x > 1 or x < -1 or y > 1 or y < -1 or z > 12 or z < 11:
                     if time.time() - last_xyz_alert_time > 10:
                         print("XYZ ALERT")
-                        os.system('ping admins "ALERT: move"')
+                        os.system('notif admins "ALERT: move"')
                         ring()
                         last_xyz_alert_time = time.time()
 
@@ -112,7 +112,7 @@ try:
                     and button_state is False
                 ):
                     print("BUTTON ALERT")
-                    os.system('ping admins "ALERT: button"')
+                    os.system('notif admins "ALERT: button"')
                     ring()
 
                 last_button_state = button_state

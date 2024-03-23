@@ -5,7 +5,7 @@ let
     #!${pkgs.bash}/bin/bash
     while true; do
       if grep -q open /proc/acpi/button/lid/*/state; then
-        CONFIG_FILE=${config.age.secrets.credentials-notif-config.path} ${pkgs.notif}/bin/ping admins "Смертный посмел открыть мою крышку"
+        CONFIG_FILE=${config.age.secrets.credentials-notif-config.path} ${pkgs.notif}/bin/notif admins "Смертный посмел открыть мою крышку"
         sleep 1
         # systemctl reboot
       fi

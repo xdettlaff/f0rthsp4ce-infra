@@ -84,6 +84,7 @@
     ncdu
     tmux
     wget
+    notif
     ffsend
     pastebinit
     upgrade-system
