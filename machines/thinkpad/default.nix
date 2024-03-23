@@ -41,4 +41,25 @@
   ];
 
   networking = { hostName = "thinkpad"; };
+
+
+
+  sound.enable = true;
+  hardware.pulseaudio.enable = false; # Отключите PulseAudio, если используете только ALSA
+
+  # Конфигурация ALSA
+  sound.alsa = {
+    enable = true;
+    extraConfig = ''
+      # Здесь вставьте свои настройки ALSA
+      pcm.!default {
+        type hw
+        card 0
+      }
+      ctl.!default {
+        type hw           
+        card 0
+      }
+    '';
+  };
 }
