@@ -62,7 +62,7 @@ def ring():
 
 # Параметры порта
 port = "/dev/ttyUSB0"
-baudrate = 115200
+baudrate = 9600
 
 # Регулярное выражение для разбора данных
 xyz_data_pattern = re.compile(r"X: ([-\d.]+)\s+Y: ([-\d.]+)\s+Z: ([-\d.]+)")
