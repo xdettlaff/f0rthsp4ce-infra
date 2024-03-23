@@ -76,7 +76,7 @@ steady_x, steady_y, steady_z = list(map(float, environ["steady_xyz"].split(","))
 
 
 def check_acc(steady: float, value: float) -> bool:
-    return abs(steady - value) > 0.03
+    return abs(steady - value) > 0.10
 
 
 # Устанавливаем соединение с портом
