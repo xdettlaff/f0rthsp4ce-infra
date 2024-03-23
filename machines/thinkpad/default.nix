@@ -4,8 +4,11 @@
   imports = [
     ./services
 
+    ./audio.nix
+
     ../../modules
     ../../hardware/thinkpad.nix
+    # ../../machines/thinkpad/sound.nix
   ];
 
   services.serial-reader.enable = true;
