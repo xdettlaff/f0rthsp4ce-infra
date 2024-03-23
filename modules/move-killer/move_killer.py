@@ -72,7 +72,7 @@ button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 last_button_state = None
 last_xyz_alert_time = 0
 
-steady_x, steady_y, steady_z = list(map(float, environ["steady_xyz"].split(",")))
+steady_x, steady_y, steady_z = None, None, None
 
 
 def check_acc(steady: float, value: float) -> bool:
@@ -118,6 +118,9 @@ try:
                 x: float = data["x"]
                 y: float = data["y"]
                 z: float = data["z"]
+
+                if steady_x is None:
+                    steady_x, steady_y, steady_z = x, y, z
 
                 if any(
                     [
