@@ -43,23 +43,31 @@
   networking = { hostName = "thinkpad"; };
 
 
+  environment.systemPackages = with pkgs; [
+    # mpg123
+    # pipewire
+    alsa-utils # Добавляем утилиты ALSA (включая aplay)
+    pulseaudio
+  ];
 
   sound.enable = true;
-  hardware.pulseaudio.enable = false; # Отключите PulseAudio, если используете только ALSA
+  # 
+  #   security.rtkit.enable = true;
 
-  # Конфигурация ALSA
-  sound.alsa = {
-    enable = true;
-    extraConfig = ''
-      # Здесь вставьте свои настройки ALSA
-      pcm.!default {
-        type hw
-        card 0
-      }
-      ctl.!default {
-        type hw           
-        card 0
-      }
-    '';
-  };
+  # services.pipewire = {
+  #   enable = true;
+  #   alsa.enable = true;
+  #   pulse.enable = true;
+  #   wireplumber.enable = true;
+  # };
+
+  # hardware.pulseaudio.enable = true;  # Включаем PulseAudio
+
+  # sound.enable = true;  # Включаем поддержку звука в NixOS
+
+  # Если вы используете звуковую карту или драйвер, которому нужны дополнительные настройки, укажите их здесь
+
+  services.udev.packages =
+    [ pkgs.alsa-utils ]; # Добавляем правила udev для ALSA
+
 }
