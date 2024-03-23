@@ -24,7 +24,7 @@ last_ring = 0.0
 
 def ring():
     global last_ring
-    if time.time() - last_ring > 3:
+    if time.time() - last_ring < 3:
         return
     last_ring = time.time()
     ws = WebSocket(sslopt={"cert_reqs": CERT_NONE})
