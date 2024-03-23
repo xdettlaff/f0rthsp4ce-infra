@@ -149,9 +149,6 @@ try:
 
                 last_button_state = button_state
 
-        # Маленькая пауза, чтобы не загружать процессор
-        time.sleep(0.1)
-
 except serial.SerialException as e:
     print(f"Ошибка при подключении к порту: {e}")
     msg = f"ALERT: serial error: {e}"
