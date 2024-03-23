@@ -91,6 +91,7 @@ button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 last_button_state = None
 last_xyz_alert_time = 0
 last_steady_recheck = time.time()
+ast_play_sound = 60
 
 steady_x, steady_y, steady_z = None, None, None
 
@@ -142,7 +143,7 @@ try:
                 if steady_x is None:
                     steady_x, steady_y, steady_z = x, y, z
 
-                if time.time() - last_steady_recheck > 60:
+                if time.time() - last_steady_recheck > 30:
                     print("Reassing steady values")
                     steady_x, steady_y, steady_z = x, y, z
                     last_steady_recheck = time.time()
@@ -158,7 +159,10 @@ try:
                         print(f"XYZ ALERT: f{x}, {y}, {z}")
                         os.system(f'notif admins "ALERT: move {x}, {y}, {z}"')
                         ring()
-                        play_sound()
+                        if last_play_sound > 60:
+                          play_sound()
+                          ast_play_sound = time.time()
+                          
                         last_xyz_alert_time = time.time()
 
             if data["type"] == "btn":
@@ -172,7 +176,9 @@ try:
                     print("BUTTON ALERT")
                     os.system('notif admins "ALERT: button"')
                     ring()
-                    play_sound()
+                    if last_play_sound > 60:
+                      play_sound()
+                      last_play_sound = time.time()
 
                 last_button_state = button_state
 
