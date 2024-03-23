@@ -72,6 +72,13 @@ button_data_pattern = re.compile(r"Button: (HIGH|LOW)")
 last_button_state = None
 last_xyz_alert_time = 0
 
+steady_x, steady_y, steady_z = list(map(float, environ["steady_xyz"].split(",")))
+
+
+def check_acc(steady: float, value: float) -> bool:
+    return abs(steady - value) < 0.03
+
+
 # Устанавливаем соединение с портом
 try:
     ser = serial.Serial(port, baudrate, timeout=1)
@@ -112,7 +119,11 @@ try:
                 y: float = data["y"]
                 z: float = data["z"]
 
-                if x > 1 or x < -1 or y > 1 or y < -1 or z > 12 or z < 11:
+                if (
+                    check_acc(steady_x, x)
+                    and check_acc(steady_y, y)
+                    and check_acc(steady_z, z)
+                ):
                     if time.time() - last_xyz_alert_time > 10:
                         print("XYZ ALERT")
                         os.system('notif admins "ALERT: move"')
