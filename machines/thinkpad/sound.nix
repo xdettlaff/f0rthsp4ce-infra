@@ -43,5 +43,6 @@
   };
 
   users.extraUsers.def.extraGroups = [ "jackaudio" ];
+  hardware.pulseaudio.package = pkgs.pulseaudio.override { jackaudioSupport = true; };
 
 }
