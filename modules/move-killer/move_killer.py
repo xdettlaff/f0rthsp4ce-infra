@@ -1,10 +1,12 @@
+from hashlib import sha256
+from shlex import quote
 import serial
 import re
 import os
 import time
 from os import environ
 
-from json import dumps as json_dumps
+from json import JSONDecodeError, dumps as json_dumps
 from json import loads as json_loads
 from ssl import CERT_NONE, SSLContext
 from websocket import WebSocket
@@ -84,16 +86,30 @@ try:
     while True:
         if ser.in_waiting > 0 or True:
             line = ser.readline().decode("utf-8").strip()
-            # print(line)  # Для отладки: выводим сырую строку
+            print(f"Line: {line}")
 
-            # Используем регулярные выражения для разбора строки
-            xyz_match = xyz_data_pattern.search(line)
-            if xyz_match:
-                # Преобразуем извлеченные строки в числа с плавающей точкой
-                x = float(xyz_match.group(1))
-                y = float(xyz_match.group(2))
-                z = float(xyz_match.group(3))
-                # print(f"X: {x}, Y: {y}, Z: {z}")  # Теперь у вас есть переменные x, y, z в формате float
+            try:
+                data = json_loads(line)
+            except JSONDecodeError:
+                print(f"Invalid JSON: {line}")
+                continue
+
+            if "type" not in data:
+                print(f"Invalid data: {data}")
+                continue
+
+            if data["type"] == "ver":
+                h = sha256(data["c"]).hexdigest()
+                if h != environ["hash"]:
+                    msg = f"ALERT: hash mismatch, orig data: {h}"
+                    print(msg)
+                    os.system(f"notif admins {quote(msg)}")
+                    exit(1)
+
+            if data["type"] == "acc":
+                x: float = data["x"]
+                y: float = data["y"]
+                z: float = data["z"]
 
                 if x > 1 or x < -1 or y > 1 or y < -1 or z > 12 or z < 11:
                     if time.time() - last_xyz_alert_time > 10:
@@ -102,9 +118,8 @@ try:
                         ring()
                         last_xyz_alert_time = time.time()
 
-            button_match = button_data_pattern.search(line)
-            if button_match:
-                button_state = True if button_match.group(1) == "HIGH" else False
+            if data["type"] == "btn":
+                button_state = data["s"]
 
                 if (
                     last_button_state is not None
