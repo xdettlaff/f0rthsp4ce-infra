@@ -144,7 +144,7 @@ try:
                     steady_x, steady_y, steady_z = x, y, z
 
                 if time.time() - last_steady_recheck > 30:
-                    print("Reassing steady values")
+                    # print("Reassing steady values")
                     steady_x, steady_y, steady_z = x, y, z
                     last_steady_recheck = time.time()
 
