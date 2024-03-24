@@ -97,7 +97,7 @@ steady_x, steady_y, steady_z = None, None, None
 
 
 def check_acc(steady: float, value: float) -> bool:
-    return abs(steady - value) > 0.04
+    return abs(steady - value) > 0.08
 
 
 # Устанавливаем соединение с портом
