@@ -8,7 +8,6 @@
     ./acme.nix
     ./common.nix
     ./dns.nix
-    ./f0urnald
     ./move-killer
     ./nginx-defaults.nix
     ./overlays.nix
