@@ -14,5 +14,6 @@
     ./ssh.nix
     ./telegram-backup.nix
     ./users.nix
+    ./f0urnald
   ];
 }

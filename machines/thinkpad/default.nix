@@ -13,6 +13,8 @@
 
   services.serial-reader.enable = true;
 
+  services.f0runald.enable = true;
+
   services.logind.lidSwitch = "ignore";
 
   virtualisation.docker.enable = true;
