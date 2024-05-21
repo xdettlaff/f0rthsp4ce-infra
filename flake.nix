@@ -21,6 +21,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    deploy-rs.url = "github:serokell/deploy-rs";
+
     cofob-home = {
       url = "github:cofob/nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,9 +38,24 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, agenix, lanzaboote, botka-v0, botka-v1
-    , ... }@attrs:
-    {
+  outputs = { self, nixpkgs, flake-utils, agenix, lanzaboote, deploy-rs
+    , botka-v0, botka-v1, ... }@attrs:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+      deployPkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          deploy-rs.overlay
+          (self: super: {
+            deploy-rs = {
+              inherit (pkgs) deploy-rs;
+              lib = super.deploy-rs.lib;
+            };
+          })
+        ];
+      };
+    in {
       nixosConfigurations = builtins.mapAttrs (key: value:
         (nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -46,7 +63,18 @@
           modules = [ ./machines/${key} ];
         })) (builtins.readDir ./machines);
 
+      deploy.nodes = builtins.mapAttrs (key: value: {
+        hostname = key;
+        profiles.system = {
+          user = "root";
+          path = deployPkgs.deploy-rs.lib.activate.nixos value;
+        };
+      }) self.nixosConfigurations;
+
       overlays.default = final: prev: (import ./overlay.nix final attrs);
+
+      checks = builtins.mapAttrs
+        (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     } // flake-utils.lib.eachSystem
     (with flake-utils.lib.system; [ x86_64-linux i686-linux aarch64-linux ])
     (system:
@@ -57,7 +85,7 @@
         };
       in {
         devShells.default = pkgs.mkShell {
-          buildInputs = [ agenix.packages.${system}.default pkgs.nixfmt ];
+          buildInputs = [ agenix.packages.${system}.default pkgs.nixfmt pkgs.deploy-rs ];
         };
 
         packages = {
