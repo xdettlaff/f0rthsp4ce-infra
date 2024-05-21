@@ -55,16 +55,19 @@
           })
         ];
       };
+      meta = builtins.mapAttrs
+        (key: value: pkgs.lib.importJSON ./machines/${key}/meta.json)
+        (builtins.readDir ./machines);
     in {
       nixosConfigurations = builtins.mapAttrs (key: value:
         (nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          system = meta.${key}.system;
           specialArgs = attrs;
           modules = [ ./machines/${key} ];
         })) (builtins.readDir ./machines);
 
       deploy.nodes = builtins.mapAttrs (key: value: {
-        hostname = key;
+        hostname = meta.${key}.deploy_ip;
         profiles.system = {
           user = "root";
           path = deployPkgs.deploy-rs.lib.activate.nixos value;
@@ -85,7 +88,8 @@
         };
       in {
         devShells.default = pkgs.mkShell {
-          buildInputs = [ agenix.packages.${system}.default pkgs.nixfmt pkgs.deploy-rs ];
+          buildInputs =
+            [ agenix.packages.${system}.default pkgs.nixfmt pkgs.deploy-rs ];
         };
 
         packages = {
