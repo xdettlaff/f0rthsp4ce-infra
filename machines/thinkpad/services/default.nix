@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./web.nix ./telegram-bot.nix ./gameserver.nix ./lid.nix ];
+  imports = [ ./web.nix ./gameserver.nix ./lid.nix ];
 }
