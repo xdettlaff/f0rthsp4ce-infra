@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./telegram-bot.nix ./lid.nix ];
+  imports = [ ./lid.nix ];
 }
